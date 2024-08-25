@@ -6,7 +6,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from internal.repository import InitializeDatabase, TaskStatus
 from internal.pkg.specs import ValidateRegistrationPayload
-from internal.service.service import CreateTask, FetchUserTasks, UpdateTask, UserRegistration, UserLogin
+from internal.service.service import CreateTask, DeleteTask, FetchUserTasks, UpdateTask, UserRegistration, UserLogin
 from flask import Flask, request, jsonify, g
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 
@@ -192,9 +192,28 @@ def updatetask(task_id):
 
 
 
+@app.route('/api/tasks/<int:task_id>', methods=['DELETE'])
+@jwt_required()
+def deletetask(task_id):
+    current_user = get_jwt_identity()
+    user_id = current_user['id']
 
+    # Check if user_id is valid
+    if not user_id:
+        return jsonify({"message": "Invalid or expired token"}), 401
 
+    database = g.get('db_session')
+    if database is None:
+        return jsonify({'message': 'Database not available'}), 500
 
+    result = DeleteTask(database, task_id, user_id)
+
+    if result:
+        return jsonify({
+            'message': 'Task deleted successfully!'
+        }), 200
+    else:
+        return jsonify({'message': 'Task deletion failed or task not found'}), 404
 
 
 if __name__ == '__main__':

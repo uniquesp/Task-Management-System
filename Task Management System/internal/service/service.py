@@ -46,3 +46,8 @@ def UpdateTask(database, task_id, title, description, status, priority, due_date
 
     task = TaskRepository.update(database, task_id, title, description, status, priority, due_date, user_id)
     return task
+
+
+def DeleteTask(database, task_id, user_id):
+    task = TaskRepository.delete(database, task_id, user_id)
+    return task

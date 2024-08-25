@@ -83,3 +83,14 @@ class TaskRepository:
 
         database.commit()
         return task
+
+    @staticmethod
+    def delete(database, task_id, user_id):
+        task = database.query(Task).filter(Task.id == task_id, Task.user_id == user_id).first()
+
+        if not task:
+            return None
+
+        database.delete(task)
+        database.commit()
+        return task
