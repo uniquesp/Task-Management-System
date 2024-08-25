@@ -1,4 +1,4 @@
-from internal.repository import User
+from internal.repository import User, Task
 
 def UserRegistrationRepo(database, username, password):
     # Check if the username already exists
@@ -15,3 +15,18 @@ def UserRegistrationRepo(database, username, password):
 def UserLoginRepo(database, username):
     user = database.query(User).filter_by(username=username).first()
     return user
+
+class TaskRepository:
+    @staticmethod
+    def create(database, title, description, status, priority, due_date, user_id):
+        new_task = Task(
+            title=title,
+            description=description,
+            status=status,
+            priority=priority,
+            due_date=due_date,
+            user_id=user_id
+        )
+        database.add(new_task)
+        database.commit()
+        return new_task

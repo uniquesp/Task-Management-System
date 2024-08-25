@@ -1,7 +1,8 @@
 import bcrypt
-from ..repository.repo import UserRegistrationRepo, UserLoginRepo
-import datetime
-import jwt
+from ..repository.repo import TaskRepository, UserRegistrationRepo, UserLoginRepo
+from datetime import datetime
+from flask_jwt_extended import create_access_token
+
 
 def UserRegistration(database, username, password):
   hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
@@ -19,12 +20,16 @@ def UserLogin(database, username, password):
         return False
 
     if bcrypt.checkpw(password.encode('utf-8'), user.password):
-        token = jwt.encode({
-            'username': user.username,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)  # Token expires in 1 hour
-        }, 'SECRET_KEY', algorithm='HS256')
-        
+        # Create JWT access token with user ID as part of the identity
+        token = create_access_token(identity={'id': user.id})
         return token
     else:
         return False
+    
+    
+def CreateTask(database, title, description, status, priority, due_date, user_id):
+    if due_date:
+        due_date = datetime.strptime(due_date, '%Y-%m-%d')
 
+    task = TaskRepository.create(database, title, description, status, priority, due_date, user_id)
+    return task

@@ -13,6 +13,13 @@ class TaskStatus(enum.Enum):
     IN_PROGRESS = "In Progress"
     DONE = "Done"
 
+
+# Enum for task priority
+class TaskPriority(enum.Enum):
+    HIGH = "HIGH"
+    MEDIUM = "MEDIUM"
+    LOW = "LOW"
+
 # Define the User model
 class User(Base):
     __tablename__ = 'users'
@@ -30,7 +37,8 @@ class Task(Base):
     title = Column(String(200), nullable=False)
     description = Column(Text, nullable=True)
     status = Column(Enum(TaskStatus), default=TaskStatus.TODO, nullable=False)
-    priority = Column(Integer, nullable=False)
+    priority = Column(Enum(TaskPriority), default=TaskPriority.TODO, nullable=False)
+    # priority = Column(Integer, nullable=False)
     due_date = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
@@ -38,6 +46,20 @@ class Task(Base):
 
     # Relationship with user
     user = relationship('User', back_populates='tasks')
+
+    def to_dict(self):
+            return {
+                'id': self.id,
+                'title': self.title,
+                'description': self.description,
+                'status': self.status.value,  # Convert Enum to string
+                'priority': self.priority,
+                'due_date': self.due_date.isoformat() if self.due_date else None,
+                'created_at': self.created_at.isoformat(),
+                'updated_at': self.updated_at.isoformat(),
+                'user_id': self.user_id,
+            }
+    
 
 def InitializeDatabase():
     # Create an engine connected to tasks.db at the root directory
