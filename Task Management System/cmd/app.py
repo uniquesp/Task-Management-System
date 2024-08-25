@@ -6,7 +6,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from internal.repository import InitializeDatabase, TaskStatus
 from internal.pkg.specs import ValidateRegistrationPayload
-from internal.service.service import CreateTask, UserRegistration, UserLogin
+from internal.service.service import CreateTask, FetchUserTasks, UserRegistration, UserLogin
 from flask import Flask, request, jsonify, g
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 
@@ -121,9 +121,38 @@ def addtask():
         return jsonify({'message': 'Task creation failed'}), 400
 
 
+
 @app.route('/api/tasks', methods=['GET'])
+@jwt_required()
 def gettask():
-    pass
+    # Get the user_id from the JWT identity
+    current_user = get_jwt_identity()
+    user_id = current_user['id']
+
+    # Check if user_id is valid
+    if not user_id:
+        return jsonify({"message": "Invalid or expired token"}), 401
+
+    database = g.get('db_session')
+    if database is None:
+        return jsonify({'message': 'Database not available'}), 500
+
+    # Get query parameters for filtering and searching
+    status = request.args.get('status')
+    priority = request.args.get('priority')
+    due_date = request.args.get('due_date')
+    search_query = request.args.get('search')
+
+    # Fetch tasks based on filters and search query
+    tasks = FetchUserTasks(database, user_id, status, priority, due_date, search_query)
+
+    if tasks is not None:
+        return jsonify({
+            'message': 'Tasks retrieved successfully!',
+            'tasks': [task.to_dict() for task in tasks]  # Assuming to_dict() method exists
+        }), 200
+    else:
+        return jsonify({'message': 'No tasks found or retrieval failed'}), 404
 
 
 if __name__ == '__main__':

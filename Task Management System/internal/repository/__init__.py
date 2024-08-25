@@ -9,9 +9,9 @@ Base = declarative_base()
 
 # Enum for task status
 class TaskStatus(enum.Enum):
-    TODO = "Todo"
-    IN_PROGRESS = "In Progress"
-    DONE = "Done"
+    TODO = "TODO"
+    IN_PROGRESS = "IN_PROGRESS"
+    DONE = "DONE"
 
 
 # Enum for task priority
@@ -37,7 +37,7 @@ class Task(Base):
     title = Column(String(200), nullable=False)
     description = Column(Text, nullable=True)
     status = Column(Enum(TaskStatus), default=TaskStatus.TODO, nullable=False)
-    priority = Column(Enum(TaskPriority), default=TaskPriority.TODO, nullable=False)
+    priority = Column(Enum(TaskPriority), default=TaskPriority.LOW, nullable=False)
     # priority = Column(Integer, nullable=False)
     due_date = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
@@ -53,7 +53,7 @@ class Task(Base):
                 'title': self.title,
                 'description': self.description,
                 'status': self.status.value,  # Convert Enum to string
-                'priority': self.priority,
+                'priority': self.priority.value,
                 'due_date': self.due_date.isoformat() if self.due_date else None,
                 'created_at': self.created_at.isoformat(),
                 'updated_at': self.updated_at.isoformat(),

@@ -33,3 +33,8 @@ def CreateTask(database, title, description, status, priority, due_date, user_id
 
     task = TaskRepository.create(database, title, description, status, priority, due_date, user_id)
     return task
+
+
+def FetchUserTasks(database, user_id, status=None, priority=None, due_date=None, search_query=None):
+    tasks = TaskRepository.fetch_user_tasks(database, user_id, status, priority, due_date, search_query)
+    return tasks
