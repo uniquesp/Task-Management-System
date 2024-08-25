@@ -38,3 +38,11 @@ def CreateTask(database, title, description, status, priority, due_date, user_id
 def FetchUserTasks(database, user_id, status=None, priority=None, due_date=None, search_query=None):
     tasks = TaskRepository.fetch_user_tasks(database, user_id, status, priority, due_date, search_query)
     return tasks
+
+
+def UpdateTask(database, task_id, title, description, status, priority, due_date, user_id):
+    if due_date:
+        due_date = datetime.strptime(due_date, '%Y-%m-%d')
+
+    task = TaskRepository.update(database, task_id, title, description, status, priority, due_date, user_id)
+    return task

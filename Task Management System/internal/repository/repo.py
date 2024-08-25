@@ -60,3 +60,26 @@ class TaskRepository:
         except Exception as e:
             print(f"Error fetching tasks: {e}")
             return None
+
+
+    @staticmethod
+    def update(database, task_id, title, description, status, priority, due_date, user_id):
+        task = database.query(Task).filter(Task.id == task_id, Task.user_id == user_id).first()
+
+        if not task:
+            return None
+
+        # Update only the provided fields
+        if title is not None:
+            task.title = title
+        if description is not None:
+            task.description = description
+        if status is not None:
+            task.status = status
+        if priority is not None:
+            task.priority = priority
+        if due_date is not None:
+            task.due_date = due_date  # Update due_date only if provided
+
+        database.commit()
+        return task

@@ -6,7 +6,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from internal.repository import InitializeDatabase, TaskStatus
 from internal.pkg.specs import ValidateRegistrationPayload
-from internal.service.service import CreateTask, FetchUserTasks, UserRegistration, UserLogin
+from internal.service.service import CreateTask, FetchUserTasks, UpdateTask, UserRegistration, UserLogin
 from flask import Flask, request, jsonify, g
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 
@@ -153,6 +153,48 @@ def gettask():
         }), 200
     else:
         return jsonify({'message': 'No tasks found or retrieval failed'}), 404
+
+
+@app.route('/api/tasks/<int:task_id>', methods=['PUT'])
+@jwt_required()
+def updatetask(task_id):
+    current_user = get_jwt_identity()
+    user_id = current_user['id']
+
+    # Check if user_id is valid
+    if not user_id:
+        return jsonify({"message": "Invalid or expired token"}), 401
+
+    data = request.get_json()
+    title = data.get('title')
+    description = data.get('description')
+    status = data.get('status')
+    priority = data.get('priority')
+    due_date = data.get('due_date')
+
+    # Validate required fields
+    if not title or not priority:
+        return jsonify({'message': 'Title and priority are required'}), 400
+
+    database = g.get('db_session')
+    if database is None:
+        return jsonify({'message': 'Database not available'}), 500
+
+    result = UpdateTask(database, task_id, title, description, status, priority, due_date, user_id)
+
+    if result:
+        return jsonify({
+            'message': 'Task updated successfully!',
+            'task': result.to_dict()
+        }), 200
+    else:
+        return jsonify({'message': 'Task update failed or task not found'}), 404
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
