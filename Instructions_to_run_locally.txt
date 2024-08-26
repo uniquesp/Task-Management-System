@@ -1,0 +1,45 @@
+
+Instructions to Run the Application Locally:
+
+1. **Install Dependencies**:
+   - Ensure you have Python installed (preferably version 3.7 or higher).
+   - Install the required Python packages by running:
+     ```
+     pip install -r requirements.txt
+     ```
+
+2. **Set Up Environment Variables**:
+   - Create a `.env` file in the root directory of the project.
+   - Add the following environment variables to the `.env` file:
+     ```
+     FLASK_APP=app.py
+     FLASK_ENV=development
+     JWT_SECRET_KEY=your_jwt_secret_key
+     ```
+
+3. **Set Up the Database**:
+   - Ensure your database server is running and accessible.
+   - Modify the database configuration in the application to point to your local database.
+
+4. **Run Database Migrations** (if applicable):
+   - Apply any pending database migrations to set up the necessary tables:
+     ```
+     flask db upgrade
+     ```
+
+5. **Run the Flask Application**:
+   - Start the Flask application by running:
+     ```
+     flask run
+     ```
+
+6. **Access the Application**:
+   - The application should now be running locally. You can access it via `http://127.0.0.1:5000/`.
+
+7. **Testing the Application**:
+   - You can use tools like Postman or cURL to test the registration and login endpoints.
+   - Register a new user by sending a POST request to `/register` with a JSON payload containing a username and password.
+   - Log in using the `/login` endpoint to receive a JWT token, which can then be used for authenticated requests.
+
+8. **Stopping the Application**:
+   - To stop the application, press `CTRL+C` in the terminal where the application is running.
