@@ -1,10 +1,9 @@
 {
 	"info": {
-		"_postman_id": "d202227c-3e95-45c1-b0fe-880899738fb2",
+		"_postman_id": "99d305e1-dd51-4787-8b43-ff6128dd61af",
 		"name": "Task Management System",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "27185431",
-		"_collection_link": "https://warped-robot-362377.postman.co/workspace/Abhi1925~05a5aa29-2044-4216-8853-343cbcf0941d/collection/27185431-d202227c-3e95-45c1-b0fe-880899738fb2?action=share&source=collection_link&creator=27185431"
+		"_exporter_id": "37897396"
 	},
 	"item": [
 		{
@@ -63,10 +62,69 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "User Login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\":\"user4\",\r\n    \"password\":\"password4\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5000/api/login",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"status": "CREATED",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/3.0.4 Python/3.12.4"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 25 Aug 2024 14:35:04 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "201"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User logged in successfully!\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6InVzZXI0IiwiZXhwIjoxNzI0NjAwMTA0fQ.gC43Qh8Sg8NpSKGBC0rEsRcvMO2XD2RSSF1aJyxmq94\"\n}"
+						}
+					]
 				},
 				{
-					"name": "Add a task",
+					"name": "Add a Task",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -111,7 +169,104 @@
 		},
 		{
 			"name": "GET Requests",
-			"item": []
+			"item": [
+				{
+					"name": "View Tasks",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/tasks",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PUT Request",
+			"item": [
+				{
+					"name": "Update Task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNDYxMjA5NCwianRpIjoiOGQzYjFlMzAtZTYyZS00MGM4LTgxMzEtMTJiNzlhMmNkZjE1IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6eyJpZCI6M30sIm5iZiI6MTcyNDYxMjA5NCwiY3NyZiI6IjI2ZWNkOTU0LWU5OTEtNDA0Mi04MGM0LTU1ZTVkNjFjOGJjNSIsImV4cCI6MTcyNDYxNTY5NH0.JkHvwh55JdRlQLtz-wBh48P3kAHG_SR3UQkIPVIdivc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Updated Task1\",\r\n  \"description\": \"Updated description\",\r\n  \"status\": \"IN_PROGRESS\",\r\n  \"priority\": \"MEDIUM\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/tasks/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"tasks",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DELETE Request",
+			"item": [
+				{
+					"name": "Delete Task",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

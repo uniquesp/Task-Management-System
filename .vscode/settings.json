@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": [
+        "./Task Management System",
+        "./Task Management System/cmd"
+    ]
+}
