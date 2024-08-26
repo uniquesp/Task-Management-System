@@ -1,0 +1,22 @@
+
+Approach and Assumptions:
+
+1. **User Registration and Login**:
+   - The application handles user registration and login using a simple validation mechanism.
+   - During registration, the `ValidateRegistrationPayload` function ensures that the username is at least 3 characters long and the password is at least 6 characters long.
+   - Passwords are hashed using bcrypt before storing them in the database to ensure security.
+   - During login, the user's credentials are verified against the stored hashed password using bcrypt.
+
+2. **JWT Authentication**:
+   - The application uses JSON Web Tokens (JWT) for user authentication.
+   - Upon successful login, a JWT access token is created using the `create_access_token` function from `flask_jwt_extended`.
+   - This token is then returned to the user and can be used for subsequent API requests to authenticate the user.
+
+3. **Database Interaction**:
+   - The application interacts with the database through a repository layer, which abstracts the database queries.
+   - The `UserLoginRepo` function fetches the user's details based on the username from the database.
+
+4. **Assumptions**:
+   - It is assumed that the database is properly set up and contains the necessary tables and columns for user data.
+   - The application assumes that the `bcrypt` library is used for password hashing and that the database stores these hashed passwords.
+   - It is assumed that the JWT secret key is securely configured in the application's environment variables.
